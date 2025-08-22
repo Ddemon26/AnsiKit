@@ -7,12 +7,8 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>AnsiKit</PackageId>
         <Authors>You</Authors>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Description>Tiny Spectre.Console helpers: Header/Info/Warn/Ok/Error/Status/RunAsync.</Description>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <PackageOutputPath>C:\Users\damon\.nuget\custom-packages</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
