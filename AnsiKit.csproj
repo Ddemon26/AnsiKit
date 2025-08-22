@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>AnsiKit</PackageId>
+        <Authors>You</Authors>
+        <Version>1.0.1</Version>
+        <Description>Tiny Spectre.Console helpers: Header/Info/Warn/Ok/Error/Status/RunAsync.</Description>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageOutputPath>C:\Users\damon\.nuget\custom-packages</PackageOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="NetAdmin.Spectre.Console.Json" Version="1.0.3"/>
+        <PackageReference Include="Spectre.Console" Version="0.49.1"/>
+        <PackageReference Include="Spectre.Console.Cli" Version="0.49.1"/>
+    </ItemGroup>
+
+</Project>
