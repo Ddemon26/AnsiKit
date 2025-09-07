@@ -7,23 +7,28 @@ namespace AnsiKit.Core;
 /// <summary>Wrappers for Panel, Rule, Grid, Calendar.</summary>
 public static class PanelsAndGrid {
     public static void Panel(string content, string? header = null, Color? borderColor = null, BoxBorder? border = null, Justify? headerJustify = null) {
-        var panel = new Panel( new Markup( Markup.Escape( content ) ) );
-        if ( !string.IsNullOrWhiteSpace( header ) ) {
-            panel.Header = new PanelHeader( $"[bold]{Markup.Escape( header! )}[/]" );
-            if ( headerJustify is { } j ) {
-                panel.Header = panel.Header.Justify( j );
+        // Create the panel with escaped content to ensure any brackets are literal.
+        var panel = new Panel(new Markup(Markup.Escape(content)));
+
+        // Configure the header if provided. Use bold markup to distinguish it.
+        if (!string.IsNullOrWhiteSpace(header)) {
+            var hdr = new PanelHeader($"[bold]{Markup.Escape(header!)}[/]");
+            if (headerJustify is { } j) {
+                hdr = hdr.Justify(j);
             }
+            panel.Header = hdr;
         }
 
-        if ( borderColor is not null ) { }
-
+        // Apply border style and optional border color. If no border is given
+        // default to rounded corners for consistency with other widgets.
         panel.Border = border ?? BoxBorder.Rounded;
-        if ( borderColor is { } c ) {
-            panel.BorderStyle = new Style( c );
+        if (borderColor is { } c) {
+            panel.BorderStyle = new Style(c);
         }
 
+        // Expand to fill the available console width.
         panel.Expand();
-        AnsiConsole.Write( panel );
+        AnsiConsole.Write(panel);
     }
 
     public static void Rule(string? title = null, Color? color = null, Justify justify = Justify.Left) {
@@ -64,17 +69,36 @@ public static class PanelsAndGrid {
     }
 
     public static void Calendar(DateTime date, IEnumerable<(int Year, int Month, int Day, string? Description, Style? Style)>? events = null, CultureInfo? culture = null) {
-        var cal = new Calendar( date );
-        if ( culture != null ) {
-            cal.Culture( culture.Name );
+        var cal = new Calendar(date);
+
+        // Apply optional culture to localize month/day names.
+        if (culture != null) {
+            cal.Culture(culture.Name);
         }
 
-        if ( events != null ) {
+        // Add calendar events if provided. Support descriptions and optional
+        // highlight styles. When a description is provided the overload with
+        // a description will be used, otherwise the simple overload is used.
+        if (events != null) {
             foreach (var e in events) {
-                cal.AddCalendarEvent( e.Year, e.Month, e.Day, e.Style );
+                if (!string.IsNullOrWhiteSpace(e.Description)) {
+                    // Use the overload that accepts a description and optional style.
+                    if (e.Style != null) {
+                        cal.AddCalendarEvent(e.Description!, e.Year, e.Month, e.Day, e.Style);
+                    } else {
+                        cal.AddCalendarEvent(e.Description!, e.Year, e.Month, e.Day);
+                    }
+                } else {
+                    // No description; call the overload that accepts only the date and optional style.
+                    if (e.Style != null) {
+                        cal.AddCalendarEvent(e.Year, e.Month, e.Day, e.Style);
+                    } else {
+                        cal.AddCalendarEvent(e.Year, e.Month, e.Day);
+                    }
+                }
             }
         }
 
-        AnsiConsole.Write( cal );
+        AnsiConsole.Write(cal);
     }
 }
